@@ -2,22 +2,36 @@ resource "aws_elastic_beanstalk_environment" "vprofile-bean-prod19" {
   name                = "vprofile-bean-prodtest19"
   application         = aws_elastic_beanstalk_application.vprofile-prod.name
   #solution_stack_name = "64bit Amazon Linux 2 v4.1.1 running Tomcat 8.5 Corretto 11"
-  solution_stack_name = "64bit Amazon Linux 2 v4.3.9 running Tomcat 8.5 Corretto 11"
+  solution_stack_name = "64bit Amazon Linux 2023 v5.4.1 running Tomcat 10 Corretto 17"
   cname_prefix        = "vprofile-bean-prodtest19"
   setting {
     name      = "VPCId"
     namespace = "aws:ec2:vpc"
     value     = module.vpc.vpc_id
   }
+
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "IamInstanceProfile"
     value     = "aws-elasticbeanstalk-ec2-role"
   }
+ 
   setting {
     namespace = "aws:ec2:vpc"
     name      = "AssociatePublicIpAddress"
     value     = "false"
+  }
+
+setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "RootVolumeType"
+    value     = "gp3"
+  }
+
+setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "DisableIMDSv1"
+    value     = "true"
   }
 
   setting {
